@@ -10,8 +10,8 @@
                 <input type="radio"
                        name="searchType"
                        id="@column.Key"
-                       value="@column.Key" 
-                       checked="@column.Key == 'all''"/>
+                       value="@column.Key"
+                       checked="@column.Key == 'all''" />
                 <label for="@column.Key">@column.Value</label>
             </span>
         }
@@ -19,7 +19,7 @@
 
     <p>
         <label for="searchTerm">Keyword:</label>
-        <input type="text" name="searchTerm" id="searchTerm" />
+        <input type="text" required name="searchTerm" id="searchTerm" />
     </p>
 
     <input type="submit" value="Search" />
@@ -30,7 +30,59 @@
 @if (ViewBag.jobs != null)
 {
 
-    <h3>@ViewBag.jobs.Count Result(s)</h3>
+    @if (ViewBag.jobs.Count > 1)
+    {
+         <h3>@ViewBag.jobs.Count Results</h3>
+    }
+    else if (ViewBag.jobs.Count == 1)
+    {
+        <h3>@ViewBag.jobs.Count Result</h3>
+    }
+    else
+    {
+        <h3>No Results</h3>
+    }
 
-    // TODO #2 - Loop over jobs dictionary and display all job fields 
+   
+
+    // TODO #2 - Loop over jobs dictionary and display all job fields
+
+    int number = 1;
+
+    @foreach (Dictionary<string, string> jobsDict in ViewBag.jobs)
+    {
+
+        int increment = number++;
+
+
+        {
+            <div>
+                <h3>Result @increment :</h3>
+                <table class="job-listing">
+                    @foreach (KeyValuePair<string, string> job in jobsDict)
+
+                     {
+                        if (job.Key == "name")
+                        {
+                            <tr>
+                                <th>Result: </th>
+                                <th> @increment</th>
+                            </tr>
+                            <tr>
+                                <td>@job.Key.ToUpper()</td>
+                                <td>@job.Value</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@job.Key.ToUpper()</td>
+                                <td><a asp-controller="List" asp-action="Jobs" asp-route-column="@job.Key" asp-route-value="@job.Value">@job.Value</a></td>
+                            </tr>
+                        }
+                     }
+                </table>
+            </div>
+        }
+    }
 }

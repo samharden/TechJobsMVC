@@ -5,3 +5,40 @@
 @{ 
     // TODO #3 - Use the same list display from Views/Search/Index.cshtml 
 }
+
+@if (ViewBag.jobs != null)
+{
+    int number = 1;
+
+    @foreach (Dictionary<string, string> jobsDict in ViewBag.jobs)
+    {
+
+        int increment = number++;
+        <h3>Result @increment :</h3>
+
+        {
+            <div>
+                <table class="job-listing">
+                    @foreach (KeyValuePair<string, string> job in jobsDict)
+
+                    {
+                        if (job.Key == "name")
+                        {
+                            <tr>
+                                <td>@job.Key.ToUpper()</td>
+                                <td>@job.Value</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@job.Key.ToUpper()</td>
+                                <td><a asp-controller="List" asp-action="Jobs" asp-route-column="@job.Key" asp-route-value="@job.Value">@job.Value</a></td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        }
+    }
+}
